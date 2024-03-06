@@ -1,68 +1,69 @@
-version: '3'
+version: '3.8'
 
 networks:
-  backendnet:
+  backendfaculnet:
+    driver: bridge
 
 services:
   backend:
     build: .
     image: backend:latest
     container_name: backend-container
+    networks:
+      - backendfaculnet
     ports:
-      - "3000:3000"
+      - '10000:10000'
     volumes:
       - .:/app
     tty: true
-    command: npm start
-    networks:
-      backendnet:
+    command: npm run dev
     depends_on:
-      - mongo
+      - mongo_impacta
       - postgres
 
-  frontend:
-    build: .
-    image: frontend:latest
-    container_name: frontend-container
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
-    tty: true
-    command: npm start
-    networks:
-      backendnet:
-    depends_on:
-      - backend
+  # frontend:
+  #   build: .
+  #   image: frontend:latest
+  #   container_name: frontend-container
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - .:/app
+  #   tty: true
+  #   command: npm start
+  #   networks:
+  #     - backendfaculnet
+  #   depends_on:
+  #     - backend
 
-  mongo:
+  mongo_impacta:
     image: mongo:latest
     container_name: mongo-container
     restart: always
     environment:
-      MONGO_INITDB_DATABASE: mongodb
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
+    networks:
+      - backendfaculnet
     ports:
-      - "27017:27017"
+      - '27019:27017'
     volumes:
       - mongo_data:/data/db
-    networks:
-      backendnet:
 
   postgres:
     image: postgres:latest
-    container_name: db-container
+    container_name: postgres-container
     restart: always
     environment:
-      POSTGRES_DB: postgresdb
+      # POSTGRES_DB: postgresdb
+      # POSTGRES_USER: root
       POSTGRES_PASSWORD: 123456
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      backendnet:
+      - backendfaculnet
 
 volumes:
   mongo_data:
