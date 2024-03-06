@@ -1,11 +1,23 @@
 import express from 'express'
-import userRoutes from './userRoutes'
+import clientRoutes from './clientRoutes'
+import productsRoutes from './productsRoutes'
+import purchaseRoutes from './purchaseRoutes'
+import shoppingCartRoutes from './shoppingCartRoutes'
+import adminRoutes from './adminRoutes'
+import loginRoutes from './loginRoutes'
 
 const router = express.Router()
 
-router.use('/users', userRoutes)
-router.use('/products', userRoutes)
-router.use('/purchase', userRoutes)
-router.use('/shoppingCart', userRoutes)
+// Defina uma rota básica
+router.get('/', (req, res) => {
+  res.send('Bem-vindo à minha API!')
+})
+
+router.use('/admin', adminRoutes)
+router.use('/client', clientRoutes)
+router.use('/product', productsRoutes)
+router.use('/purchase', purchaseRoutes)
+router.use('/shoppingCartCart', shoppingCartRoutes)
+router.use('/login', loginRoutes)
 
 export default router
