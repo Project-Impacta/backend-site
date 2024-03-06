@@ -1,0 +1,69 @@
+version: '3'
+
+networks:
+  backendnet:
+
+services:
+  backend:
+    build: .
+    image: backend:latest
+    container_name: backend-container
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    tty: true
+    command: npm start
+    networks:
+      backendnet:
+    depends_on:
+      - mongo
+      - postgres
+
+  frontend:
+    build: .
+    image: frontend:latest
+    container_name: frontend-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    tty: true
+    command: npm start
+    networks:
+      backendnet:
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo-container
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: mongodb
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      backendnet:
+
+  postgres:
+    image: postgres:latest
+    container_name: db-container
+    restart: always
+    environment:
+      POSTGRES_DB: postgresdb
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      backendnet:
+
+volumes:
+  mongo_data:
+  postgres_data:
