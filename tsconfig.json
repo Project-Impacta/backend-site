@@ -108,6 +108,7 @@
   },
   "include": [
     "app.ts",
-    "routes/**/*.ts"
+    "routes/**/*.ts",
+    "routes/**/**/*.ts"
   ],
 }
