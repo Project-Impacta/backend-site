@@ -2,13 +2,15 @@ import mongoose, { Document, Schema } from 'mongoose'
 
 interface Admin extends Document {
   cpf: string
-  name: string
+  firstName: string
+  lastName: string
   password: string
 }
 
 const adminSchema = new Schema<Admin>({
   cpf: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
   password: { type: String, required: true }
 })
 
