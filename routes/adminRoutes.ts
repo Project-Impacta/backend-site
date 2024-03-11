@@ -19,7 +19,8 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   const adminModel = new AdminModel({
     cpf: req.body.cpf,
-    name: req.body.name,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     password: req.body.password
   })
 

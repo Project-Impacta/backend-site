@@ -1,3 +1,4 @@
+import cors from 'cors'
 import express from 'express'
 
 import connectToMongoDB from './mongoConfig'
@@ -8,6 +9,9 @@ const port = 10000
 
 // Conectar ao MongoDB
 connectToMongoDB()
+
+// Habilitando o cors
+app.use(cors())
 
 app.use(express.json())
 app.use(routes)

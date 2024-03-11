@@ -1,10 +1,11 @@
 import express from 'express'
+
+import adminRoutes from './adminRoutes'
 import clientRoutes from './clientRoutes'
+import loginRoutes from './loginRoutes'
 import productsRoutes from './productsRoutes'
 import purchaseRoutes from './purchaseRoutes'
 import shoppingCartRoutes from './shoppingCartRoutes'
-import adminRoutes from './adminRoutes'
-import loginRoutes from './loginRoutes'
 
 const router = express.Router()
 

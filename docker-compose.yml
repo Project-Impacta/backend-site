@@ -21,20 +21,22 @@ services:
       - mongo_impacta
       - postgres
 
-  # frontend:
-  #   build: .
-  #   image: frontend:latest
-  #   container_name: frontend-container
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - .:/app
-  #   tty: true
-  #   command: npm start
-  #   networks:
-  #     - backendfaculnet
-  #   depends_on:
-  #     - backend
+  frontend:
+    build: 
+      context: ./
+      dockerfile: ../frontEnd-site/Dockerfile
+    image: frontend:latest
+    container_name: frontend-container
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../frontEnd-site/:/app
+    tty: true
+    command: npm run dev
+    networks:
+      - backendfaculnet
+    depends_on:
+      - backend
 
   mongo_impacta:
     image: mongo:latest
