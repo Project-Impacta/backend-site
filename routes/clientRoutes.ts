@@ -68,6 +68,26 @@ router.get('/:id', async (req, res) => {
 
 //Cadatra cliente
 router.post('/', async (req, res) => {
+  const isValidCPF = new CPFValidator().handle(req.body.cpf)
+  if (!isValidCPF) {
+    res.status(401)
+    res.send({ message: 'CPF invalido' })
+    return
+  }
+
+  let cli = await ClientModel.findOne({ cpf: req.body.cpf })
+  if (cli) {
+    res.status(401)
+    res.send({ message: 'CPF ja cadastrado' })
+    return
+  }
+
+  cli = await ClientModel.findOne({ email: req.body.email })
+  if (cli) {
+    res.status(401)
+    res.send({ message: 'Email ja cadastrado' })
+    return
+  }
   const clientModel = new ClientModel({
     cpf: req.body.cpf,
     firstName: req.body.firstName,
@@ -77,33 +97,17 @@ router.post('/', async (req, res) => {
     phone: req.body.phone
   })
 
-  const isValidCPF = new CPFValidator().handle(req.body.cpf)
-  if (!isValidCPF) {
-    res.status(401)
-    res.send({ message: 'CPF invalido' })
-  }
-
-  let cli = await ClientModel.findOne({ cpf: req.body.cpf })
-  if (cli) {
-    res.status(401)
-    res.send({ message: 'CPF ja cadastrado' })
-  }
-
-  cli = await ClientModel.findOne({ email: req.body.email })
-  if (cli) {
-    res.status(401)
-    res.send({ message: 'Email ja cadastrado' })
-  }
-
   clientModel
     .save()
     .then(() => {
       res.status(201)
       res.send({ message: 'Cliente cadastrado com sucesso!' })
+      return
     })
     .catch(error => {
       res.status(400)
       res.send({ message: 'Erro ao cadastrar cliente:' + error })
+      return
     })
 })
 
