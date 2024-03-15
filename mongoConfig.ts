@@ -1,14 +1,11 @@
 import mongoose from 'mongoose'
 
-// const MONGO_URI = 'mongodb://root:123456@localhost:27017/local_db?authSource=admin&readPreference=primary&directConnection=true&ssl=false'
+const MONGO_URI =
+  'mongodb+srv://gabrielcardosotavares:ZrxwqzKm72aR9MZs@impactastore.pb1hj7e.mongodb.net/local_db?retryWrites=true&w=majority&appName=ImpactaStore'
 
 const connectToMongoDB = async () => {
   try {
-    await mongoose.connect(`mongodb://mongo_impacta:27017/local_db?authSource=admin`, {
-      user: 'root',
-      pass: '123456',
-      connectTimeoutMS: 10000
-    })
+    await mongoose.connect(MONGO_URI)
     console.log('Conectado ao MongoDB')
   } catch (error) {
     console.error('Erro ao conectar ao MongoDB:', error)
