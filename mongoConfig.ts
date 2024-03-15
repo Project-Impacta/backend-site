@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const MONGO_URI =
-  'mongodb+srv://gabrielcardosotavares:ZrxwqzKm72aR9MZs@impactastore.pb1hj7e.mongodb.net/local_db?retryWrites=true&w=majority&appName=ImpactaStore'
+  'mongodb+srv://gabrielcardosotavares:colocar_senha_aqui@impactastore.pb1hj7e.mongodb.net/local_db?retryWrites=true&w=majority&appName=ImpactaStore'
 
 const connectToMongoDB = async () => {
   try {
