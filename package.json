@@ -7,6 +7,7 @@
     "lint:fix": "eslint --fix --ext .js,.mjs,.ts,.json ."
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
     "eslint": "^8.57.0",
@@ -16,8 +17,8 @@
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "prettier": "^3.2.5",
     "prettier-plugin-twig": "1.0.1",
-    "typescript": "^5.3.3",
-    "ts-node-dev": "2.0.0"
+    "ts-node-dev": "2.0.0",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@types/cors": "^2.8.17",
