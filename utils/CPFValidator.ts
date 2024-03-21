@@ -4,7 +4,7 @@ export class CPFValidator {
   private firstMultiplier: Array<number> = [10, 9, 8, 7, 6, 5, 4, 3, 2]
   private secondMultiplier: Array<number> = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
 
-  public handle(data: any): Promise<boolean> {
+  public handle(data: any): boolean {
     this.digits = this.convertToArray(data)
     return this.tryHandle()
   }
@@ -26,7 +26,7 @@ export class CPFValidator {
     return stringDigits.map(el => parseInt(el))
   }
 
-  public async tryHandle(): Promise<boolean> {
+  public tryHandle(): boolean {
     if (this.digits.length !== 11) throw new Error("The document haven't a quantity of characters needed")
     if (!this.calcFirstDigit() || !this.calcSecondDigit()) return false
     return true
