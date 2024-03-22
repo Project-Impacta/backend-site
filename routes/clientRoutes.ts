@@ -132,10 +132,10 @@ router.patch('/updateEmail', (req, res) => {
 router.patch('/updatePassword', (req, res) => {
   try {
     ClientModel.findOneAndUpdate(
-      { cpf: req.body.cpf },
+      { cpf: req.body.cpf, password: req.body.password },
       {
         $push: {
-          password: req.body.password
+          password: req.body.newPassword
         }
       }
     )
