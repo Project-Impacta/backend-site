@@ -12,7 +12,7 @@ services:
     networks:
       - backendfaculnet
     ports:
-      - '10000:10000'
+      - '3333:3333'
     volumes:
       - .:/app
     tty: true
