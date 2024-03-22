@@ -8,6 +8,7 @@ const MONGO_URI =
 const connectToMongoDB = async () => {
   switch (NODE_ENV) {
     case 'local':
+      console.log(MONGO_STRING, MONGO_USER, MONGO_PASS)
       try {
         await mongoose.connect(MONGO_STRING, {
           user: MONGO_USER,
@@ -22,6 +23,7 @@ const connectToMongoDB = async () => {
     case 'dev':
       // TODO QUANDO IMPLEMENTAR NA ESTEIRA TEM QUE VER COMO ACESSAR AS VARIAIVEIS DE AMBIENTE APARTIR DOQ FOI CADASTRADO NA ESTEIRA
       try {
+        console.log(MONGO_STRING, MONGO_USER, MONGO_PASS)
         await mongoose.connect(MONGO_STRING, {
           user: MONGO_USER,
           pass: MONGO_PASS,
@@ -35,6 +37,7 @@ const connectToMongoDB = async () => {
     default:
       // TODO QUANDO IMPLEMENTAR NA ESTEIRA TEM QUE VER COMO ACESSAR AS VARIAIVEIS DE AMBIENTE APARTIR DOQ FOI CADASTRADO NA ESTEIRA
       try {
+        console.log(MONGO_URI)
         await mongoose.connect(MONGO_URI)
         console.log('Conectado ao MongoDB Cloud default - sem senha')
       } catch (error) {
