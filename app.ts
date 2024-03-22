@@ -5,7 +5,7 @@ import connectToMongoDB from './mongoConfig'
 import routes from './routes/index'
 
 const app = express()
-const port = 80
+const port = 8080
 
 // Conectar ao MongoDB
 connectToMongoDB()
