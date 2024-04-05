@@ -37,7 +37,7 @@ async function getProfile(cpf: string, password: string): Promise<ResAuth | unde
 }
 
 // Autenticacao no site
-router.get('/auth', async (req, res) => {
+router.post('/auth', async (req, res) => {
   try {
     const profile = await getProfile(req.body.cpf, req.body.password)
     if (profile != undefined) {
