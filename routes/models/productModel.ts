@@ -1,21 +1,19 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
 interface Product extends Document {
-  productId: number
   name: string
   description: string
   price: number
-  category: string
+  category: number
 }
 
 const productSchema = new Schema<Product>({
-  productId: { type: Number, unique: true },
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  category: { type: String, required: true }
+  category: { type: Number, required: true }
 })
 
-const ProductModel = mongoose.model<Product>('Produtc', productSchema)
+const ProductModel = mongoose.model<Product>('Product', productSchema)
 
 export default ProductModel
