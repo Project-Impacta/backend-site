@@ -4,13 +4,13 @@ const router = express.Router()
 
 //Consulta base pedidos
 router.get('/', (req, res) => {
-  res.send('Rota de usuários')
+  return res.json({ message: 'Rota de usuários' })
 })
 
 //Consulta pedido pelo numero/id
 router.get('/:id', (req, res) => {
   const pruchaseId = req.params.id
-  res.send(`Detalhes do usuário com ID ${pruchaseId}`)
+  return res.status(200).json({ message: `Detalhes do usuário com ID ${pruchaseId}` })
 })
 
 //Em contrucao
