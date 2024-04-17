@@ -7,7 +7,11 @@
     "lint:fix": "eslint --fix --ext .js,.mjs,.ts,.json ."
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/intl": "^1.2.2",
+    "@types/jsonwebtoken": "^9.0.6",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
     "eslint": "^8.57.0",
@@ -21,10 +25,13 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@types/cors": "^2.8.17",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
+    "intl": "^1.2.5",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.0",
     "mongoose-sequence": "^6.0.1",
     "path": "^0.12.7",
