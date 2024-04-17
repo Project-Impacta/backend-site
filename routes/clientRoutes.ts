@@ -1,6 +1,9 @@
 import express from 'express'
 
+// import bcrpty from 'bcrypt'
+import { BadResquestError, NotFoundError } from '../utils/APIError'
 import { CPFValidator } from './../utils/CPFValidator'
+import AdminModel from './models/adminModel'
 import ClientModel from './models/clientModel'
 
 const router = express.Router()
@@ -18,8 +21,7 @@ router.get('/', async (req, res) => {
   const clients = await ClientModel.find()
 
   if (clients.length == 0) {
-    res.status(400)
-    res.send({ message: 'Nem um usuario cadastrado' })
+    throw new NotFoundError('Nem um usuario cadastrado')
   }
 
   const array: Array<FormatClient> = new Array<FormatClient>()
@@ -34,8 +36,7 @@ router.get('/', async (req, res) => {
     array.push(item)
   })
 
-  res.status(200)
-  res.send({ clients: array })
+  return res.status(200).json({ clients: array })
 })
 
 //Obtem cliente
@@ -43,11 +44,9 @@ router.get('/:id', async (req, res) => {
   const client = await ClientModel.find({ cpf: req.params.id })
 
   if (client.length == 0) {
-    res.status(400)
-    res.send({ message: 'Nem um cliente cadastrado com cpf informado' })
+    throw new NotFoundError('Nem um cliente cadastrado com cpf informado')
   } else if (client.length == 2) {
-    res.status(400)
-    res.send({ message: 'Mais de um cliente cadastrado com cpf informado' })
+    throw new BadResquestError('Mais de um cliente cadastrado com cpf informado')
   }
 
   const array: Array<FormatClient> = new Array<FormatClient>()
@@ -62,87 +61,84 @@ router.get('/:id', async (req, res) => {
     array.push(item)
   })
 
-  res.status(200)
-  res.send({ client: array })
+  return res.status(200).json({ client: array })
 })
 
 //Cadatra cliente
 router.post('/', async (req, res) => {
-  const isValidCPF = new CPFValidator().handle(req.body.cpf)
+  const { cpf, firstName, lastName, email, password, phone } = req.body
+  // const newPassword = bcrpty.hash(password, 10)
+  const isValidCPF = new CPFValidator().handle(cpf)
   if (!isValidCPF) {
-    res.status(401)
-    res.send({ message: 'CPF invalido' })
-    return
+    throw new BadResquestError('CPF invalido')
   }
 
-  let cli = await ClientModel.findOne({ cpf: req.body.cpf })
+  let cli = await ClientModel.findOne({ cpf: cpf })
   if (cli) {
-    res.status(401)
-    res.send({ message: 'CPF ja cadastrado' })
-    return
+    throw new BadResquestError('CPF ja cadastrado como cliente')
   }
 
-  cli = await ClientModel.findOne({ email: req.body.email })
+  const adm = await AdminModel.findOne({ cpf: cpf })
+  if (adm) {
+    throw new BadResquestError('CPF ja cadastrado como admin')
+  }
+
+  cli = await ClientModel.findOne({ email: email })
   if (cli) {
-    res.status(401)
-    res.send({ message: 'Email ja cadastrado' })
-    return
+    throw new BadResquestError('Email ja cadastrado')
   }
   const clientModel = new ClientModel({
-    cpf: req.body.cpf,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: req.body.password,
-    phone: req.body.phone
+    cpf,
+    firstName,
+    lastName,
+    email,
+    password,
+    phone
   })
 
   clientModel
     .save()
     .then(() => {
-      res.status(201)
-      res.send({ message: 'Cliente cadastrado com sucesso!' })
-      return
+      throw res.status(201).json({ message: 'Cliente cadastrado com sucesso!' })
     })
     .catch(error => {
-      res.status(400)
-      res.send({ message: 'Erro ao cadastrar cliente:' + error })
-      return
+      throw new BadResquestError('Erro ao cadastrar cliente:' + error)
     })
 })
 
 //Atualiza email
 router.patch('/updateEmail', (req, res) => {
-  try {
-    ClientModel.findOneAndUpdate(
-      { cpf: req.body.cpf },
-      {
-        $push: {
-          email: req.body.email
-        }
+  const { cpf, email, password } = req.body
+  ClientModel.findOneAndUpdate(
+    { cpf: cpf, password: password },
+    {
+      $push: {
+        email: email
       }
-    )
-    res.send({ message: `Email do cliente atualizado com sucesso.` })
-  } catch {
-    res.send({ message: `Nao foi possivel atualizar o email do usuario.` })
-  }
+    }
+  ).catch(error => {
+    console.log('Nao foi possivel atualizar o email do usuario.' + error)
+    throw new BadResquestError('Nao foi possivel atualizar o email do usuario.')
+  })
+  return res.status(201).json({ message: 'Email do cliente atualizado com sucesso.' })
 })
 
 //Atualiza senha
 router.patch('/updatePassword', (req, res) => {
-  try {
-    ClientModel.findOneAndUpdate(
-      { cpf: req.body.cpf, password: req.body.password },
-      {
-        $push: {
-          password: req.body.newPassword
-        }
+  const { cpf, oldPassword, newPassword } = req.body
+
+  ClientModel.findOneAndUpdate(
+    { cpf: cpf, password: oldPassword },
+    {
+      $push: {
+        password: newPassword
       }
-    )
-    res.send({ message: `Senha do cliente atualizado com sucesso.` })
-  } catch {
-    res.send({ message: `Nao foi possivel atualizar o senha do usuario.` })
-  }
+    }
+  ).catch(error => {
+    console.log('Nao foi possivel atualizar a senha do usuario.' + error)
+    throw new BadResquestError('Nao foi possivel atualizar a senha do usuario.')
+  })
+  return res.status(201).json({ message: 'Senha do cliente atualizado com sucesso.' })
 })
 
 export default router
