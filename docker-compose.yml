@@ -1,0 +1,36 @@
+version: '3.8'
+
+networks:
+  backendfaculnet:
+    driver: bridge
+
+services:
+  backend:
+    build: .
+    image: backend:latest
+    container_name: backend-container
+    networks:
+      - backendfaculnet
+    ports:
+      - '3333:3333'
+    volumes:
+      - .:/app
+    tty: true
+    command: npm run dev
+
+  frontend:
+    build: 
+      context: ./
+      dockerfile: ../frontEnd-site/Dockerfile
+    image: frontend:latest
+    container_name: frontend-container
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../frontEnd-site/:/app
+    tty: true
+    command: npm run dev
+    networks:
+      - backendfaculnet
+    depends_on:
+      - backend
