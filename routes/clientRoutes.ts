@@ -99,7 +99,7 @@ router.post('/', async (req, res) => {
   clientModel
     .save()
     .then(() => {
-      throw res.status(201).json({ message: 'Cliente cadastrado com sucesso!' })
+      return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' })
     })
     .catch(error => {
       throw new BadResquestError('Erro ao cadastrar cliente:' + error)
