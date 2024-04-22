@@ -116,7 +116,7 @@ router.post('/', async (req, res) => {
       return res.status(201).json({ message: 'Produto cadastrado com sucesso!' })
     })
     .catch(error => {
-      throw new BadResquestError('Erro ao cadastrar cliente:' + error)
+      throw new BadResquestError('Erro ao cadastrar produto:' + error)
     })
 })
 
