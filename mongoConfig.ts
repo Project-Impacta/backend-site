@@ -8,7 +8,6 @@ const MONGO_URI =
 const connectToMongoDB = async () => {
   switch (NODE_ENV) {
     case 'local':
-      console.log(MONGO_STRING, MONGO_USER)
       try {
         await mongoose.connect(MONGO_STRING, {
           user: MONGO_USER,
@@ -17,13 +16,12 @@ const connectToMongoDB = async () => {
         })
         console.log('Conectado ao MongoDB')
       } catch (error) {
-        console.error('Erro ao conectar ao MongoDB:', error)
+        throw new Error('Erro ao conectar ao MongoDB:' + error)
       }
       break
     case 'dev':
       // TODO QUANDO IMPLEMENTAR NA ESTEIRA TEM QUE VER COMO ACESSAR AS VARIAIVEIS DE AMBIENTE APARTIR DOQ FOI CADASTRADO NA ESTEIRA
       try {
-        console.log(MONGO_STRING, MONGO_USER)
         await mongoose.connect(MONGO_STRING, {
           user: MONGO_USER,
           pass: MONGO_PASS,
@@ -32,6 +30,7 @@ const connectToMongoDB = async () => {
         console.log('Conectado ao MongoDB Cloud dev')
       } catch (error) {
         console.error('Erro ao conectar ao MongoDB Cloud:', error)
+        throw new Error('Erro ao conectar ao MongoDB Cloud:' + error)
       }
       break
     default:
@@ -42,6 +41,7 @@ const connectToMongoDB = async () => {
         console.log('Conectado ao MongoDB Cloud default - sem senha')
       } catch (error) {
         console.error('Erro ao conectar ao MongoDB:', error)
+        throw new Error('Erro ao conectar ao MongoDB:' + error)
       }
   }
 }
