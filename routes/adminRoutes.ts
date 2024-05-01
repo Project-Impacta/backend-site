@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
     array.push(item)
   })
 
-  return res.status(200).json({ clients: array })
+  return res.status(200).json({ data: array })
 })
 
 //Consulta admin
