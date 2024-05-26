@@ -6,24 +6,26 @@ import ShoppingCartModel from './models/shoppingCartModel'
 
 const router = express.Router()
 
+//ROTAS OBSOLETAS
+
 // Cria um carrinho para o usuario
 router.post('/', async (req: Request, res: Response) => {
-  const { clientId } = req.body
+  const { cpf } = req.body
 
   // Verifica se tem algum carrinho com itens dentro
-  let shoppingCart = await ShoppingCartModel.findOne({ client: clientId }).populate('items.product').exec()
+  let shoppingCart = await ShoppingCartModel.findOne({ cpf }).populate('items.product').exec()
 
   if (!shoppingCart) {
     // Cria o carrinho com nem um item
-    shoppingCart = await ShoppingCartModel.create({ client: clientId, items: [] })
+    shoppingCart = await ShoppingCartModel.create({ cpf, items: [] })
   }
 
   return res.status(200).json(shoppingCart)
 })
 
-// Add a product to the shopping cart
+// Adiciona um produto ao carrinho do usuario
 router.post('/addProduct', async (req: Request, res: Response) => {
-  const { clientId, productId: bodyProductId, quantity } = req.body
+  const { cpf, productId: bodyProductId, quantity } = req.body
 
   // Verifica se o produto existe
   const product = await ProductModel.findById(bodyProductId).exec()
@@ -33,7 +35,7 @@ router.post('/addProduct', async (req: Request, res: Response) => {
   }
 
   // Verifica se tem algum carrinho com itens dentro
-  const shoppingCart = await ShoppingCartModel.findOne({ client: clientId }).populate('items.productId').exec()
+  const shoppingCart = await ShoppingCartModel.findOne({ cpf }).populate('items.productId').exec()
 
   if (!shoppingCart) {
     throw new NotFoundError('Shopping cart not found')
@@ -62,10 +64,10 @@ router.post('/addProduct', async (req: Request, res: Response) => {
 
 // Atualiza a quantidade do produto no carrinho
 router.patch('/updateQuantity', async (req: Request, res: Response) => {
-  const { clientId, productId: bodyProductId, quantity } = req.body
+  const { cpf, productId: bodyProductId, quantity } = req.body
 
   // Verifica se tem algum carrinho com itens dentro
-  const shoppingCart = await ShoppingCartModel.findOne({ client: clientId }).populate('items.product').exec()
+  const shoppingCart = await ShoppingCartModel.findOne({ cpf }).populate('items.product').exec()
 
   if (!shoppingCart) {
     throw new NotFoundError('Shopping cart not found')
@@ -91,10 +93,10 @@ router.patch('/updateQuantity', async (req: Request, res: Response) => {
 
 // Remove produto do carrinho
 router.patch('/removeProduct', async (req: Request, res: Response) => {
-  const { clientId, productId: bodyProductId } = req.body
+  const { cpf, productId: bodyProductId } = req.body
 
   // Verifica se tem algum carrinho com itens dentro
-  const shoppingCart = await ShoppingCartModel.findOne({ client: clientId }).populate('items.product').exec()
+  const shoppingCart = await ShoppingCartModel.findOne({ cpf }).populate('items.product').exec()
 
   if (!shoppingCart) {
     throw new NotFoundError('Shopping cart not found')

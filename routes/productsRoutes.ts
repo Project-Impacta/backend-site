@@ -1,5 +1,4 @@
 import express from 'express'
-import { NumberFormat } from 'intl'
 
 import { BadResquestError, NotFoundError } from '../utils/APIError'
 import ProductModel from './models/productModel'
@@ -12,15 +11,6 @@ interface FromatProduct {
   description: string
   price: number
   category: number
-}
-
-function formatPrice(price: number): string {
-  const formatter = new NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  })
-
-  return formatter.format(price)
 }
 
 //Consulta base de produtos
@@ -49,7 +39,7 @@ router.get('/', async (req, res) => {
 
 //Consulta produto pelo id
 router.get('/:id', async (req, res) => {
-  const product = await ProductModel.find({ id: req.params.id })
+  const product = await ProductModel.find({ _id: req.params.id })
 
   if (product.length == 0) {
     throw new NotFoundError('Nem um produto cadastrado com id informado')
