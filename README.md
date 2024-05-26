@@ -6,7 +6,7 @@ Install WSL Ubunto
 
 Install NPM and NVM
 
-Use node:18.18.2
+Use node:20.11.1
 
 ```bash
 npm install
