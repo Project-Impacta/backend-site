@@ -21,7 +21,7 @@ router.use('/login', authFrontend, loginRoutes)
 router.use('/admin', authFrontend, adminRoutes)
 router.use('/client', authFrontend, clientRoutes)
 router.use('/product', authFrontend, productsRoutes)
-router.use('/productImage', upload.single('image'), productsImageRoutes)
+router.use('/productImage', upload.single('image'), authFrontend, productsImageRoutes)
 router.use('/purchase', authFrontend, purchaseRoutes)
 
 //ROTAS OBSOLETAS
