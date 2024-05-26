@@ -20,6 +20,8 @@ router.use('/admin', authFrontend, adminRoutes)
 router.use('/client', authFrontend, clientRoutes)
 router.use('/product', authFrontend, productsRoutes)
 router.use('/purchase', authFrontend, purchaseRoutes)
+
+//ROTAS OBSOLETAS
 router.use('/shoppingCartCart', authFrontend, shoppingCartRoutes)
 
 export default router
