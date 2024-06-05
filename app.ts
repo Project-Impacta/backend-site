@@ -3,13 +3,13 @@ import 'express-async-errors'
 import cors from 'cors'
 import express from 'express'
 
-import { CORS_URL } from './enviroment'
+import { CORS_URL, PORT } from './enviroment'
 import { errorMiddleware } from './middlewares/erros'
 import connectToMongoDB from './mongoConfig'
 import routes from './routes/index'
 
 const app = express()
-const port = 3333
+const port = PORT
 
 // Conectar ao MongoDB
 connectToMongoDB()

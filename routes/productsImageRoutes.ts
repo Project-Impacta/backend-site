@@ -10,11 +10,12 @@ import { createHash } from 'crypto';
 
 const router = express.Router()
 
-function calculateHash(filepath: string): string {
-  const hasher = createHash('sha256');
-  const fileBuffer = fs.readFileSync(filepath);
-  hasher.update(fileBuffer);
-  return hasher.digest('hex');
+function fileToBase64(filepath: string): string {
+    const filePath =filepath;
+    const fileBuffer = fs.readFileSync(filePath);
+    const base64Encoded = fileBuffer.toString('base64');
+    fs.unlinkSync(filePath); // Remove o arquivo temporário
+    return base64Encoded;
 }
 
 // Cadastra hash da imagem
@@ -23,9 +24,8 @@ router.post('/', async (req, res) => {
   if (!file) {
     throw new BadResquestError('Nem um arquivo enviado para o cadastro.')
   }
-  const hashFile = calculateHash(file!.path)
   const mimetype = file.mimetype
-  fs.unlinkSync(file.path)
+  const hashFile = fileToBase64(file!.path)
   if (!isObjectIdOrHexString(req.body.productId)) {
     throw new BadResquestError('Formato do productId invalido')
   }
@@ -72,18 +72,18 @@ router.get('/', async (req, res) => {
     throw new NotFoundError('Nao tem imagens cadastradas.')
   }
 
-  return res.json({ data: [find] })
+  return res.json({ data: find })
 })
 
 // Deleta hash da imagem do banco
-router.delete('/', async (req, res) => {
-  const { productId } = req.body
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
   const find = await ProductImageModel.find()
   if (find.length == 0) {
     throw new NotFoundError('Nao tem imagens cadastradas.')
   }
-  if (productId) {
-    const image = await ProductImageModel.find({ productId: productId })
+  if (id) {
+    const image = await ProductImageModel.find({ productId: id })
     if (!image) {
       throw new NotFoundError('Imagem nao encontrada com o id informado.')
     }

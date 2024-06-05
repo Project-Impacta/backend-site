@@ -9,6 +9,7 @@ export enum ENV_VARS {
 }
 
 export const NODE_ENV = process.env.NODE_ENV || ENV_VARS.LOCAL
+export const PORT = process.env.PORT || 3333
 export const MONGO_USER = process.env.MONGO_USER || 'root'
 export const MONGO_PASS = process.env.MONGO_PASS || '123456'
 export const MONGO_STRING = process.env.MONGO_STRING || 'mongodb://mongo_impacta:27017/local_impacta?authSource=admin'
