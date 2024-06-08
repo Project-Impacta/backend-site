@@ -3,7 +3,6 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 
 import { JWT_PASS } from '../enviroment'
-import { BadResquestError } from '../utils/APIError'
 import AdminModel from './models/adminModel'
 import ClientModel from './models/clientModel'
 
@@ -21,7 +20,7 @@ interface User {
 }
 
 async function getProfile(cpf: string, password: string): Promise<ResAuth | undefined> {
-  // const criptPass = bcrpty.hash(password, 10)
+  // const cryptPass = bcrypt.hash(password, 10);
   // Valida na base de admins
   const admin = await AdminModel.findOne({ cpf: cpf, password: password })
   if (admin) {
@@ -44,15 +43,19 @@ async function getProfile(cpf: string, password: string): Promise<ResAuth | unde
 router.post('/auth', async (req, res) => {
   try {
     const { cpf, password } = req.body
+    console.log('Received request:', { cpf, password })
     const profile = await getProfile(cpf, password)
-    if (profile != undefined) {
+    if (profile !== undefined) {
       const token = jwt.sign({ profile: { type: profile.type, user: profile.data } }, JWT_PASS, { expiresIn: '8h' })
+      console.log('Authentication successful:', { profile, token })
       return res.status(200).json({ message: 'Autenticado', token: token, profile: { type: profile.type, user: profile.data } })
     } else {
+      console.log('Authentication failed: user not found')
       return res.status(400).json({ message: 'Usuario com a senha informada nao encontrado.' })
     }
   } catch (error) {
-    throw new BadResquestError('Erro ao validar login:' + error)
+    console.error('Error during authentication:', error)
+    throw new BadRequestError('Erro ao validar login: ' + error)
   }
 })
 

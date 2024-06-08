@@ -1,8 +1,6 @@
-import { createHash } from 'crypto'
 import express from 'express'
 import fs from 'fs'
 import { isObjectIdOrHexString } from 'mongoose'
-import path from 'path'
 
 import { BadResquestError, NotFoundError } from '../utils/APIError'
 import ProductImageModel from './models/productImageModel'

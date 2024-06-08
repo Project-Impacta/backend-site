@@ -13,24 +13,33 @@ services:
       - backendfaculnet
     ports:
       - '3333:3333'
+    environment:
+      - API_URL=http://localhost:3333
+      - JWT_PASS=WLN6dqLUzSb1aiUw2d11afcnyt4321z
     volumes:
       - .:/app
     tty: true
     command: npm run dev
 
   frontend:
-    build: 
-      context: ./
-      dockerfile: ../frontEnd-site/Dockerfile
+    build:
+      context: ../frontEnd-site/
+      dockerfile: Dockerfile
     image: frontend:latest
     container_name: frontend-container
-    ports:
-      - "3000:3000"
-    volumes:
-      - ../frontEnd-site/:/app
-    tty: true
-    command: npm run dev
     networks:
       - backendfaculnet
+    ports:
+      - '3000:3000'
     depends_on:
       - backend
+    environment:
+      - NEXT_PUBLIC_NODE_ENV=local
+      - NEXTAUTH_SECRET=U73n45/8oi2N56H0dOcqW932D8b/UbD5wXyscBerV/Q=
+      - FRONTEND_ORIGIN=frontend-origin
+      - FRONTEND_TOKEN=ad120r9j09ASJ0912ssSA9Sj1
+      - NEXT_PUBLIC_FRONTEND_ORIGIN=frontend-origin
+      - NEXT_PUBLIC_FRONTEND_TOKEN=ad120r9j09ASJ0912ssSA9Sj1
+      - API_URL=http://backend-container:3333
+      - JWT_PASS=WLN6dqLUzSb1aiUw2d11afcnyt4321z
+      - NEXTAUTH_URL=http://localhost:3000
