@@ -13,33 +13,43 @@ services:
       - backendfaculnet
     ports:
       - '3333:3333'
-    environment:
-      - API_URL=http://localhost:3333
-      - JWT_PASS=WLN6dqLUzSb1aiUw2d11afcnyt4321z
     volumes:
       - .:/app
     tty: true
     command: npm run dev
+    depends_on:
+      - mongo_impacta
 
   frontend:
-    build:
-      context: ../frontEnd-site/
-      dockerfile: Dockerfile
+    build: 
+      context: ./
+      dockerfile: ../frontEnd-site/Dockerfile
     image: frontend:latest
     container_name: frontend-container
     networks:
       - backendfaculnet
     ports:
-      - '3000:3000'
+      - "3000:3000"
+    volumes:
+      - ../frontEnd-site/:/app
+    tty: true
+    command: npm run dev
     depends_on:
       - backend
+
+  mongo_impacta:
+    image: mongo:latest
+    container_name: mongo-container
+    restart: always
     environment:
-      - NEXT_PUBLIC_NODE_ENV=local
-      - NEXTAUTH_SECRET=U73n45/8oi2N56H0dOcqW932D8b/UbD5wXyscBerV/Q=
-      - FRONTEND_ORIGIN=frontend-origin
-      - FRONTEND_TOKEN=ad120r9j09ASJ0912ssSA9Sj1
-      - NEXT_PUBLIC_FRONTEND_ORIGIN=frontend-origin
-      - NEXT_PUBLIC_FRONTEND_TOKEN=ad120r9j09ASJ0912ssSA9Sj1
-      - API_URL=http://backend-container:3333
-      - JWT_PASS=WLN6dqLUzSb1aiUw2d11afcnyt4321z
-      - NEXTAUTH_URL=http://localhost:3000
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    networks:
+      - backendfaculnet
+    ports:
+      - '27019:27017'
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
