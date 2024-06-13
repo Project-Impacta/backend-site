@@ -3,6 +3,7 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 
 import { JWT_PASS } from '../enviroment'
+import { BadResquestError } from '../utils/APIError'
 import AdminModel from './models/adminModel'
 import ClientModel from './models/clientModel'
 
@@ -55,7 +56,7 @@ router.post('/auth', async (req, res) => {
     }
   } catch (error) {
     console.error('Error during authentication:', error)
-    throw new BadRequestError('Erro ao validar login: ' + error)
+    throw new BadResquestError('Erro ao validar login: ' + error)
   }
 })
 
