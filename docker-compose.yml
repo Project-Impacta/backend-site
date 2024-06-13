@@ -22,8 +22,8 @@ services:
 
   frontend:
     build: 
-      context: ./
-      dockerfile: ../frontEnd-site/Dockerfile
+      context: ../frontEnd-site/
+      dockerfile: Dockerfile
     image: frontend:latest
     container_name: frontend-container
     networks:
