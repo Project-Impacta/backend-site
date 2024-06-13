@@ -23,11 +23,11 @@ const storage = multer.diskStorage({
 
 // Filtro para validar os tipos de arquivo
 const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif']
+  const allowedMimeTypes = ['image/webp']
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true)
   } else {
-    cb(new Error('Invalid file type. Only JPEG, PNG, and GIF are allowed.'))
+    cb(new Error('Invalid file type. Only Webp is allowed.'))
   }
 }
 
