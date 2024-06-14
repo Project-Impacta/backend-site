@@ -27,7 +27,7 @@ const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: multer.
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true)
   } else {
-    cb(new Error('Invalid file type. Only Webp is allowed.'))
+    cb(new BadResquestError('Invalid file type. Only Webp is allowed.'))
   }
 }
 
