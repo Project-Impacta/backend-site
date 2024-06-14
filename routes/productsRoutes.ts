@@ -111,15 +111,15 @@ router.post('/', async (req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
-  const product = await ProductModel.find({ id: req.params.id })
+  const product = await ProductModel.find({ _id: req.params.id })
 
   if (product.length == 0) {
-    throw new NotFoundError('Nem um produto cadastrado com id informado')
+    throw new NotFoundError('Nenhum produto cadastrado com id informado')
   } else if (product.length >= 2) {
     throw new BadResquestError('Mais de um produto cadastrado com id informado')
   }
 
-  await ProductModel.find({ id: req.params.id }).deleteOne()
+  await ProductModel.find({ _id: req.params.id }).deleteOne()
 
   return res.status(200).json({ message: 'Produto excluido com sucesso', product: product })
 })

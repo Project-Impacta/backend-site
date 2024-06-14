@@ -29,9 +29,9 @@ export class CPFValidator {
   public tryHandle(): boolean {
     if (this.digits.length !== 11) throw new Error("The document haven't a quantity of characters needed")
     // retirada a validacao de cpf para nao precisarmos ficar passando cpfs invalidos toda vez.
-    if (false) {
-      if (!this.calcFirstDigit() || !this.calcSecondDigit()) return false
-    }
+    // if (false) {
+    //   if (!this.calcFirstDigit() || !this.calcSecondDigit()) return false
+    // }
     return true
   }
 

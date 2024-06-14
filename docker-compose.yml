@@ -17,20 +17,39 @@ services:
       - .:/app
     tty: true
     command: npm run dev
+    depends_on:
+      - mongo_impacta
 
   frontend:
     build: 
-      context: ./
-      dockerfile: ../frontEnd-site/Dockerfile
+      context: ../frontEnd-site/
+      dockerfile: Dockerfile
     image: frontend:latest
     container_name: frontend-container
+    networks:
+      - backendfaculnet
     ports:
       - "3000:3000"
     volumes:
       - ../frontEnd-site/:/app
     tty: true
     command: npm run dev
-    networks:
-      - backendfaculnet
     depends_on:
       - backend
+
+  mongo_impacta:
+    image: mongo:latest
+    container_name: mongo-container
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    networks:
+      - backendfaculnet
+    ports:
+      - '27019:27017'
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

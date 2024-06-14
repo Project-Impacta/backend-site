@@ -1,21 +1,19 @@
 import express from 'express'
 import fs from 'fs'
 import { isObjectIdOrHexString } from 'mongoose'
-import path from 'path'
 
 import { BadResquestError, NotFoundError } from '../utils/APIError'
 import ProductImageModel from './models/productImageModel'
 import ProductModel from './models/productModel'
-import { createHash } from 'crypto';
 
 const router = express.Router()
 
 function fileToBase64(filepath: string): string {
-    const filePath =filepath;
-    const fileBuffer = fs.readFileSync(filePath);
-    const base64Encoded = fileBuffer.toString('base64');
-    fs.unlinkSync(filePath); // Remove o arquivo temporário
-    return base64Encoded;
+  const filePath = filepath
+  const fileBuffer = fs.readFileSync(filePath)
+  const base64Encoded = fileBuffer.toString('base64')
+  fs.unlinkSync(filePath) // Remove o arquivo temporário
+  return base64Encoded
 }
 
 // Cadastra hash da imagem
@@ -53,44 +51,47 @@ router.post('/', async (req, res) => {
 })
 
 // Consulta imagem pelo id do produto
+// Backend: Ajustar a rota de consulta de imagem
 router.get('/:id', async (req, res) => {
   const { id } = req.params
 
   const image = await ProductImageModel.find({ productId: id })
-  console.log('image->',image)
   if (image.length == 0) {
-    throw new NotFoundError('Imagem nao encontrada com o id informado.')
+    throw new NotFoundError('Imagem não encontrada com o id informado.')
   }
 
-  return res.json({hash: image[0].hash})
+  return res.json(image[0])
 })
 
 // Consulta todas imagens
+// Backend: Ajustar a rota de consulta de todas as imagens
 router.get('/', async (req, res) => {
   const find = await ProductImageModel.find()
   if (find.length == 0) {
-    throw new NotFoundError('Nao tem imagens cadastradas.')
+    throw new NotFoundError('Não tem imagens cadastradas.')
   }
 
   return res.json({ data: find })
 })
-
 // Deleta hash da imagem do banco
 router.delete('/:id', async (req, res) => {
-  const { id } = req.params
-  const find = await ProductImageModel.find()
-  if (find.length == 0) {
-    throw new NotFoundError('Nao tem imagens cadastradas.')
-  }
-  if (id) {
-    const image = await ProductImageModel.find({ productId: id })
-    if (!image) {
-      throw new NotFoundError('Imagem nao encontrada com o id informado.')
+  try {
+    const { id } = req.params
+    const find = await ProductImageModel.find()
+    if (find.length === 0) {
+      return res.status(404).json({ message: 'Nao tem imagens cadastradas.' })
     }
-    await image[0].deleteOne()
+
+    const image = await ProductImageModel.findOne({ _id: id })
+    if (!image) {
+      return res.status(404).json({ message: 'Imagem nao encontrada com o id informado.' })
+    }
+
+    await image.deleteOne()
     return res.json({ message: 'Arquivo removido' })
+  } catch (error) {
+    return res.status(500).json({ message: 'Erro ao excluir imagem', error })
   }
-  throw new BadResquestError('Erro de requisicao, analise e tente novamente.')
 })
 
 export default router
