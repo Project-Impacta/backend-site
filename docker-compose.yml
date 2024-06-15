@@ -33,7 +33,7 @@ services:
     volumes:
       - ../frontEnd-site/:/app
     tty: true
-    command: npm run dev
+    command: npm run start
     depends_on:
       - backend
 
