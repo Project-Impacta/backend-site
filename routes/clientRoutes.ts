@@ -61,7 +61,7 @@ router.get('/:id', async (req, res) => {
     array.push(item)
   })
 
-  return res.status(200).json({ client: array })
+  return res.status(200).json({ data: array })
 })
 
 //Cadatra cliente

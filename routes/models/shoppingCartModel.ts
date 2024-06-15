@@ -1,5 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
+//SCHEMA OBSOLETO
+
 interface CartItens {
   productId: string // ID do produto
   quantity: number
